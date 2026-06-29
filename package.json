@@ -1,0 +1,22 @@
+{
+  "name": "resumeiq-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ResumeIQ AI - AI Resume Analyzer & Career Coach MERN SaaS",
+  "scripts": {
+    "dev": "pnpm --parallel --filter resumeiq-client --filter resumeiq-server dev",
+    "dev:client": "pnpm --filter resumeiq-client dev",
+    "dev:server": "pnpm --filter resumeiq-server dev",
+    "build": "pnpm --filter resumeiq-client build",
+    "start": "pnpm --filter resumeiq-server start",
+    "lint": "pnpm --filter resumeiq-client lint"
+  },
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  }
+}
