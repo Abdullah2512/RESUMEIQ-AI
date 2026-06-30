@@ -19,9 +19,26 @@ app.use(
     crossOriginResourcePolicy: { policy: "cross-origin" }
   })
 );
+// CLIENT_URL supports one or more comma-separated origins, e.g.:
+// CLIENT_URL=https://resumeiq-ai.vercel.app,https://resumeiq-ai-git-main-yourname.vercel.app
+const allowedOrigins = (process.env.CLIENT_URL || "http://localhost:5173")
+  .split(",")
+  .map((origin) => origin.trim().replace(/\/$/, ""))
+  .filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin(origin, callback) {
+      // Allow requests with no Origin header (curl, server-to-server, health checks)
+      if (!origin) return callback(null, true);
+
+      const normalizedOrigin = origin.replace(/\/$/, "");
+      if (allowedOrigins.includes(normalizedOrigin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
     credentials: true
   })
 );
