@@ -9,9 +9,18 @@ export const uploadRules = [
 ];
 
 export const listRules = [
-  query("search").optional().trim().isLength({ max: 80 }),
-  query("minScore").optional().isInt({ min: 0, max: 100 }),
-  query("sort").optional().isIn(["newest", "oldest", "score"])
+  query("search")
+    .optional()
+    .trim()
+    .isLength({ max: 80 }),
+
+  query("minScore")
+    .optional({ values: "falsy" })
+    .isInt({ min: 0, max: 100 }),
+
+  query("sort")
+    .optional()
+    .isIn(["newest", "oldest", "score"])
 ];
 
 export async function uploadAndAnalyze(req, res, next) {
@@ -45,7 +54,8 @@ export async function listResumes(req, res, next) {
     if (search) {
       filter.$text = { $search: search };
     }
-    if (minScore) {
+
+    if (minScore !== undefined && minScore !== "") {
       filter.atsScore = { $gte: Number(minScore) };
     }
 
